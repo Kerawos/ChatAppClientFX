@@ -23,17 +23,17 @@ public class Controller implements Initializable, IMessageObserver {
 
     private ChatSocket socket;
 
-    @FXML
-    TextArea txtChatDisplay;
-
-    @FXML
-    TextField txtUserInput;
-
+    @FXML TextArea txtChatDisplay;
+    @FXML TextField txtUserInput;
 
     public Controller(){
         socket = ChatSocket.getSocket();
     }
 
+
+    /**
+     * Starting Method from JavaFX [Initializable]
+     */
     public void initialize(URL location, ResourceBundle resources) {
         socket.connect();
         sendNickPacket(DialogUtils.createNickDialog(null));
@@ -48,6 +48,10 @@ public class Controller implements Initializable, IMessageObserver {
         });
     }
 
+    /**
+     * Method responsible managing message after received, react for type of message
+     * @param s stored message text
+     */
     @Override
     public void handleMessage(String s) {
         Type token = new TypeToken<MessageFactory>(){}.getType();
@@ -74,6 +78,10 @@ public class Controller implements Initializable, IMessageObserver {
         }
     }
 
+    /**
+     * Method responsible for send user name information
+     * @param nick stored user name
+     */
     private void sendNickPacket(String nick){
         MessageFactory factory = new MessageFactory();
         factory.setMessageType(MessageFactory.MessageType.SET_NICK);
@@ -81,6 +89,10 @@ public class Controller implements Initializable, IMessageObserver {
         sendMessage(factory);
     }
 
+    /**
+     * Method responsible for send message information (type, message)
+     * @param message stored message information
+     */
     private void sendMessagePacket(String message){
         MessageFactory factory = new MessageFactory();
         factory.setMessageType(MessageFactory.MessageType.SEND_MESSAGE);
@@ -88,6 +100,10 @@ public class Controller implements Initializable, IMessageObserver {
         sendMessage(factory);
     }
 
+    /**
+     * Method responsible for push message thru Json to connection to server
+     * @param factory prefab to create message
+     */
     public void sendMessage(MessageFactory factory){
         socket.sendMessage(MessageFactory.GSON.toJson(factory));
     }

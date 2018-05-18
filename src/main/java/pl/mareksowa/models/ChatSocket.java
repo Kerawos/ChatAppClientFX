@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+
 @ClientEndpoint
 public class ChatSocket {
 
@@ -41,7 +42,9 @@ public class ChatSocket {
         System.out.println("Connect");
     }
 
-    //handle message
+    /**
+     * Method responsible for handling message
+     */
     @OnMessage
     public void message(Session session, String message){
         observer.handleMessage(message);
@@ -55,7 +58,9 @@ public class ChatSocket {
         }
     }
 
-    //connect to server
+    /**
+     * Method responsible connect to server
+     */
     public void connect(){
         try {
             webSocketContainer.connectToServer(this, new URI(localhostURL));
