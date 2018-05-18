@@ -8,6 +8,10 @@ import java.net.URISyntaxException;
 @ClientEndpoint
 public class ChatSocket {
 
+    private String localhostURL = "ws://localhost:8080/chat";
+    //private String localhostURL = "ws://192.168.1.37:8080/chat"; // Pawel
+    //private String localhostURL = "ws://192.168.1.22:8080/chat"; // Oskar
+
     private static ChatSocket socket = new ChatSocket(); //laduje sie przy deklaracji
 
     public static ChatSocket getSocket(){ //singleton
@@ -55,9 +59,7 @@ public class ChatSocket {
 
     public void connect(){
         try {
-            webSocketContainer.connectToServer(this, new URI("ws://localhost:8080/chat"));
-            //webSocketContainer.connectToServer(this, new URI("ws://192.168.1.37:8080/chat"));  // testing PC: pa
-            //webSocketContainer.connectToServer(this, new URI("ws://192.168.1.22:8080/chat"));  // testing PC: os
+            webSocketContainer.connectToServer(this, new URI(localhostURL));
         } catch (DeploymentException e) {
             e.printStackTrace();
         } catch (IOException e) {
