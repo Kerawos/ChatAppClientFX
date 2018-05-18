@@ -1,7 +1,7 @@
 #Chat Application 2017
 
-#Technologies:
-Spring Boot, Spring MVC, JavaFX
+#Use:
+Spring Boot, JavaFX, Web Sockets, MVC, Observer, Factory
 
 #How To
 To run chat application first you have to run: 'ChatAppServer' later you can run as much as possible clients: 'ChatAppClientFX'

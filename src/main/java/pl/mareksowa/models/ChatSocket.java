@@ -12,21 +12,20 @@ public class ChatSocket {
     //private String localhostURL = "ws://192.168.1.37:8080/chat"; // Pawel
     //private String localhostURL = "ws://192.168.1.22:8080/chat"; // Oskar
 
-    private static ChatSocket socket = new ChatSocket(); //laduje sie przy deklaracji
+    private static ChatSocket socket = new ChatSocket();
 
     public static ChatSocket getSocket(){ //singleton
         return socket;
     }
 
-    private WebSocketContainer webSocketContainer; //java EE dostarcza samych interfejsuw a logike wypelniaja serwisy/contenery etc.
-    // metod abstrakcynych nie mozemy uruchomic a kontenery wypelniaja logike i te metody. classpth szuka i napotyka kontener i pozwala uruchomic
-    private Session session; //informacje na temat uzyskanego polaczenia
+    private WebSocketContainer webSocketContainer;
+    private Session session; //info about connection
 
     private ChatSocket(){
         webSocketContainer = ContainerProvider.getWebSocketContainer();
     }
 
-    private IMessageObserver observer; //pojedynczy obserwator
+    private IMessageObserver observer;
 
     public IMessageObserver getObserver() {
         return observer;
@@ -42,21 +41,21 @@ public class ChatSocket {
         System.out.println("Connect");
     }
 
-    @OnMessage //wtedy wykona sie gdy przyjdzie do nas wiadomosc
+    //handle message
+    @OnMessage
     public void message(Session session, String message){
         observer.handleMessage(message);
     }
 
     public void sendMessage (String message){
         try {
-            session.getBasicRemote().sendText(message); //getBasicRemote - strumien pomiedzy kliente, zwraca strumien
-            // pomiedzy 2 punktami i do niej mozemy wyslac sobie wiadomosc
+            session.getBasicRemote().sendText(message); // open streem client<->server
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
+    //connect to server
     public void connect(){
         try {
             webSocketContainer.connectToServer(this, new URI(localhostURL));

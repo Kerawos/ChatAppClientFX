@@ -16,6 +16,9 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Control state
+ */
 public class Controller implements Initializable, IMessageObserver {
 
     private ChatSocket socket;
@@ -33,11 +36,11 @@ public class Controller implements Initializable, IMessageObserver {
 
     public void initialize(URL location, ResourceBundle resources) {
         socket.connect();
-        sendNickPaket(DialogUtils.createNickDialog(null));
+        sendNickPacket(DialogUtils.createNickDialog(null));
         txtUserInput.requestFocus();
-        txtChatDisplay.setWrapText(true); // zeby nie zawijlo tekstu
-        socket.setObserver(this); //ustawianie obserwatora
-        txtUserInput.setOnKeyPressed(s->{ // wysylanie po kliknieciu entera
+        txtChatDisplay.setWrapText(true);
+        socket.setObserver(this);
+        txtUserInput.setOnKeyPressed(s->{
             if (s.getCode() == KeyCode.ENTER){
                 sendMessagePacket(txtUserInput.getText());
                 txtUserInput.clear();
@@ -46,7 +49,7 @@ public class Controller implements Initializable, IMessageObserver {
     }
 
     @Override
-    public void handleMessage(String s) { // co robimy z odbieranym typem wiadomosci
+    public void handleMessage(String s) {
         Type token = new TypeToken<MessageFactory>(){}.getType();
         MessageFactory factory = MessageFactory.GSON.fromJson(s, token);
         switch (factory.getMessageType()){
@@ -56,23 +59,22 @@ public class Controller implements Initializable, IMessageObserver {
             }
             case NICK_NOT_FREE:{
                 //DialogUtils.createNickDialog(factory.getMessage());
-                Platform.runLater(()->sendNickPaket(DialogUtils.createNickDialog(factory.getMessage()))); // zadanie wykonane w watku golwnym
+                Platform.runLater(()->sendNickPacket(DialogUtils.createNickDialog(factory.getMessage())));
                 break;
             }
             case USER_JOIN:{
-                //to sie przyda jak bedzie lista obok jako widok
-                txtChatDisplay.appendText("\n @@@ USER: ~~> " + factory.getMessage() + " ~~ JOIN\n");
+                txtChatDisplay.appendText("\n SERVER: USER: ~~> " + factory.getMessage() + " ~~ JOIN\n");
                 break;
             }
 
             case USER_LEFT:{
-                txtChatDisplay.appendText("\n@@@ ~~ " + factory.getMessage() + " ~~ LEFT..\n");
+                txtChatDisplay.appendText("\nSERVER: USER: ~~> " + factory.getMessage() + " ~~ LEFT..\n");
                 break;
             }
         }
     }
 
-    private void sendNickPaket(String nick){
+    private void sendNickPacket(String nick){
         MessageFactory factory = new MessageFactory();
         factory.setMessageType(MessageFactory.MessageType.SET_NICK);
         factory.setMessage(nick);
