@@ -35,8 +35,20 @@ public class Controller implements Initializable, IMessageObserver {
      * Starting Method from JavaFX [Initializable]
      */
     public void initialize(URL location, ResourceBundle resources) {
-        socket.connect();
+        String localhostURL;
+        //private String localhostURL = "ws://192.168.0.15:8080/chat"; // Ja
+        //private String localhostURL = "ws://192.168.1.37:8080/chat"; // Pawel
+        //private String localhostURL = "ws://192.168.1.22:8080/chat"; // Oskar
+        localhostURL = DialogUtils.createLocalHostURL();
+        if (localhostURL.equals("")){
+            localhostURL = "ws://localhost:8080/chat";
+        } else {
+            localhostURL = "ws://" + localhostURL + ":8080/chat";
+        }
+        System.out.println("localhost: " + localhostURL);
+        socket.connect(localhostURL);
         sendNickPacket(DialogUtils.createNickDialog(null));
+        //createLocalHostURL
         txtUserInput.requestFocus();
         txtChatDisplay.setWrapText(true);
         socket.setObserver(this);
@@ -87,6 +99,10 @@ public class Controller implements Initializable, IMessageObserver {
         factory.setMessageType(MessageFactory.MessageType.SET_NICK);
         factory.setMessage(nick);
         sendMessage(factory);
+    }
+
+    private void setLocalHostURL(String url){
+
     }
 
     /**

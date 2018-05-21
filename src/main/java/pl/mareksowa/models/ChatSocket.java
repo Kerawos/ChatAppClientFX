@@ -9,10 +9,6 @@ import java.net.URISyntaxException;
 @ClientEndpoint
 public class ChatSocket {
 
-    private String localhostURL = "ws://localhost:8080/chat";
-    //private String localhostURL = "ws://192.168.1.37:8080/chat"; // Pawel
-    //private String localhostURL = "ws://192.168.1.22:8080/chat"; // Oskar
-
     private static ChatSocket socket = new ChatSocket();
 
     public static ChatSocket getSocket(){ //singleton
@@ -61,7 +57,7 @@ public class ChatSocket {
     /**
      * Method responsible connect to server
      */
-    public void connect(){
+    public void connect(String localhostURL){
         try {
             webSocketContainer.connectToServer(this, new URI(localhostURL));
         } catch (DeploymentException e) {

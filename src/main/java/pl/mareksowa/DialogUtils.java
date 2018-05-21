@@ -13,11 +13,22 @@ public class DialogUtils {
 
         if (message == null){
             dialog.setHeaderText("Set nick");
-        }else {
+        } else {
             dialog.setHeaderText(message);
         }
         dialog.setContentText("Your nick:");
 
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            return result.get();
+        }
+        return null;
+    }
+
+    public static String createLocalHostURL(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Optional LocalHostURL");
+        dialog.setContentText("Write LocalHostURL or leave empty to connect as default: ");
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             return result.get();
