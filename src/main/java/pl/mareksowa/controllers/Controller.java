@@ -30,6 +30,7 @@ public class Controller implements Initializable, IMessageObserver {
         socket = ChatSocket.getSocket();
     }
 
+    //todo refactor
 
     /**
      * Starting Method from JavaFX [Initializable]
@@ -48,7 +49,6 @@ public class Controller implements Initializable, IMessageObserver {
         System.out.println("localhost: " + localhostURL);
         socket.connect(localhostURL);
         sendNickPacket(DialogUtils.createNickDialog(null));
-        //createLocalHostURL
         txtUserInput.requestFocus();
         txtChatDisplay.setWrapText(true);
         socket.setObserver(this);
@@ -79,12 +79,12 @@ public class Controller implements Initializable, IMessageObserver {
                 break;
             }
             case USER_JOIN:{
-                txtChatDisplay.appendText("\n SERVER: USER: ~~> " + factory.getMessage() + " ~~ JOIN\n");
+                txtChatDisplay.appendText("\n SERVER: USER (" + factory.getMessage() + ") JOIN\n");
                 break;
             }
 
             case USER_LEFT:{
-                txtChatDisplay.appendText("\nSERVER: USER: ~~> " + factory.getMessage() + " ~~ LEFT..\n");
+                txtChatDisplay.appendText("\nSERVER: USER (" + factory.getMessage() + ") LEFT..\n");
                 break;
             }
         }
@@ -99,10 +99,6 @@ public class Controller implements Initializable, IMessageObserver {
         factory.setMessageType(MessageFactory.MessageType.SET_NICK);
         factory.setMessage(nick);
         sendMessage(factory);
-    }
-
-    private void setLocalHostURL(String url){
-
     }
 
     /**
