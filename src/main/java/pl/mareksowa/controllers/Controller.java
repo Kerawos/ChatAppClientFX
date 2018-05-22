@@ -30,8 +30,6 @@ public class Controller implements Initializable, IMessageObserver {
         socket = ChatSocket.getSocket();
     }
 
-    //todo refactor
-
     /**
      * Starting Method from JavaFX [Initializable]
      */
